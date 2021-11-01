@@ -32,7 +32,7 @@ import Utilities
 
 # ! Définir la fonction Operations
 def operation(Operation):
-      
+    
     with open("files/Elections.csv" , "r") as csvfile :  
         data = list(csv.reader(csvfile , delimiter=','))
         # * le nombre de candidats ayant plus que 10 000 voix
@@ -40,7 +40,7 @@ def operation(Operation):
         if Operation == 1:
             for i,row in enumerate(data):
                 if i != 0:
-                    if int(row[len(row)-1]) > 100000 : 
+                    if int(row[-1]) > 10000 : 
                         count += 1
             return "Nombre des condidats ayant plus que 10 000 voix = {}".format(count)
         # * le nombre de candidats âgés de moins de 40 ans
@@ -54,30 +54,39 @@ def operation(Operation):
         elif Operation == 3:
             for i,row in enumerate(data):
                 if i != 0:
-                    count += int(row[len(row)-1])
-            return "La moyenne de voix obtenues = {}".format(count/i)        
+                    count += int(row[-1])
+            return "La moyenne de voix obtenues = {:.2f}".format(count/i)        
         # * le gagnant dans cette campagne,
         elif Operation == 4:
             max = 0
             max_indice = 0
             for i,row in enumerate(data):
                 if i != 0 :
-                    if max < int(row[len(row)-1]) :
+                    if max < int(row[-1]) :
                         max_indice = i
-            data[max_indice][0]
-            return "Le Gangant dans cette campagne est {} , {} , avec {} voix  "
-        
+                        max = int(row[-1])
+            return "Le Gangant dans cette campagne est : {}  {} , avec {} voix ".format(data[max_indice][1],data[max_indice][0],data[max_indice][-1])
         # * le candidat ayant le moins de voix.
         elif Operation == 5:
-            max = 0
-            min_indice = 0
-            for i,row in enumerate(data):
-                if i != 0 :
-                    if min > row[len(row)-1] :
-                        min_indice = i
-            return "le condidat ayant le moins de voix  est {} , {} , avec {} voix  ".format(data[0][min_indice], data[1][min_indice], data[3][min_indice])
+            liste_vide =[]
+            for row in data:
+                try:
+                  liste_vide.append(int(row[-1]))
+                except:
+                  pass
+            min = liste_vide[0]
+            indice_min = 0
+            for i,Nombre in enumerate(liste_vide):
+                if min > Nombre:
+                    indice_min = i
+                    min = Nombre
+            return "Le candidat ayant le moins de voix est : {} {} avec {} voix ".format(data[indice_min+1][0], data[indice_min+1][1],data[indice_min+1][-1])
+                              
+            print(liste_vide)
+                
         else:
-            csvfile.close()
+            print("wrong choice")
+            csv.close()
         
     
     
@@ -87,12 +96,17 @@ def operation(Operation):
 # ! Définir la fonction trie
 
 def Trie():
-    pass
+    with open("files/Elections.csv" , "r+") as csvfile :  
+        data = list(csv.reader(csvfile , delimiter=','))
+        columns = data[0]
+        list_to_sort = data[1:]
+        list_to_sort.sort(key = lambda x:int(x[-1]) ,reverse=True)
 
+        csvfile.seek(0)
+        csvfile.write(",".join(columns)+"\n")
+        for row in list_to_sort:
+            csvfile.write(",".join(row)+"\n")
+        csvfile.truncate()
 
 if __name__ =="__main__":
-    print(operation(1))
-    print(operation(2))
-    print(operation(3))
-    print(operation(4))
-    print(operation(5))
+    Trie()    
