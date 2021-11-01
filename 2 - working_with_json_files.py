@@ -108,5 +108,15 @@ def Trie():
             csvfile.write(",".join(row)+"\n")
         csvfile.truncate()
 
+
+
+# * * * * * * * * * * * * * * * * * Main * * * * * * * * * * * * * *
 if __name__ =="__main__":
+    print(operation(0))
+    print(operation(1))
+    print(operation(2))
+    print(operation(3))
+    print(operation(4))
+    print(operation(5))
+    
     Trie()    
