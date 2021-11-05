@@ -3,6 +3,7 @@
     Coding : UTF-8 
     Date   : 10 / 31 / 2021
 
+
     [Exercice 3] :
 
 
@@ -14,13 +15,65 @@ numéros de téléphones.
 
 """
 # ! Imports :
-import Utilities
+from Utilities import *
+import pickle 
 
+# ! Class : Contact
 
+class contact(object):
+    
 
+    __list_ids = []
+    
+    def __init__(self,nom,numero_tel) -> None:
+        self.__id = generate_id(contact.__list_ids)
+        self.nom = nom
+        self.numero_tel = numero_tel
+        contact.__list_ids.append(self.__id)
+
+    def get_contact_id(self):
+     return self.__id
+    
+    def __str__(self) -> str:
+        return "Contact ID : {} , Nom : {} , Numero de téléphone : {}".format(self.get_contact_id(),self.nom,self.numero_tel)
+
+# * Debug
+"""
+for i in range(3):
+    C =contact("Abderrahen","20202020")
+    list_contact.append(C)
+    
+for C in list_contact:
+    print(C)
+
+liste_contact = []
+
+for key,value in dictionaire_des_contact.items():
+    C = contact(key,value)
+    liste_contact.append(C)
+
+"""
+
+# ! File path will be used :  /files/Contact.txt
+file_name  = "\files\Contact.txt"
 
 # TODO: Écrire la procédure CreerFichier() qui permet de créer ce fichier en utilisant le
 # TODO: package Pickle contentant N contacts.
+
+liste_contact = []
+def CreerFichier(N):
+    for i in range(N):
+        nom_contact = lire_contacts()
+        numero_tel = lire_numero_tel()
+        C = contact (nom_contact, numero_tel)
+        liste_contact.append(C)
+        
+    with open(r"\files\Contacts.txt",'wb') as Contact_file:
+        pickled_file = pickle.Pickler(Contact_file)
+        for C in liste_contact:
+            pickled_file.dump(C)
+            
+        
 
 
 
@@ -29,6 +82,12 @@ import Utilities
 # TODO: sur un enregistrement à la fin du fichier Contacts.txt. Si le numéro de téléphone ne contient 
 # TODO: pas huit chiffres un message d’erreur sera affiché.
 
+def ajouterContact():
+    
+    print("**************** Ajouter un contact ! **************** ")
+    nom_contact = lire_contacts()
+    numero_tel = lire_numero_tel()
+    
 
 
 # TODO: Écrire la fonction Recherche(nom) qui renvoi le numéro de la personne dont le nom est passé en 
@@ -53,3 +112,7 @@ import Utilities
 # TODO: Écrire la procédure Trier() qui permet de trier les contacts du fichier « Contact.txt » selon l'ordre alphabétique des noms  
 
 
+# -------------------------------- MAIN ----------------------------------------------------
+
+if __name__ == '__main__':
+    CreerFichier(2)
